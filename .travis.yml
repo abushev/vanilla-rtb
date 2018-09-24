@@ -11,17 +11,8 @@ matrix:
       addons:
         apt:
           sources: [ 'ubuntu-toolchain-r-test', 'kalakris-cmake' ]
-          packages: [ 'g++-5', 'libstdc++-5-dev', 'cmake' ]
-      env: CMAKE_BUILD_TYPE=Debug BOOST_VERSION=1.60.0 BOOST_BUILD=true
-
-    - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          sources: [ 'ubuntu-toolchain-r-test', 'kalakris-cmake' ]
-          packages: [ 'g++-5', 'libstdc++-5-dev', 'cmake' ]
-      env: CMAKE_BUILD_TYPE=Release BOOST_VERSION=1.60.0 BOOST_BUILD=true
-
+          packages: [ 'g++-7', 'libstdc++-7-dev', 'cmake' ]
+      env: CMAKE_BUILD_TYPE=Debug BOOST_VERSION=1.67.0 BOOST_BUILD=true
 #    - os: linux
 #      compiler: clang
 #      addons:
@@ -44,7 +35,7 @@ cache:
   directories:
   - $HOME/.ccache
   #- $HOME/download
-  - ${TRAVIS_BUILD_DIR}/deps/boost-1.60.0
+  - ${TRAVIS_BUILD_DIR}/deps/boost-1.67.0
 
 install:
   ############################################################################
@@ -56,7 +47,7 @@ install:
   - env
   - |
    if [[ "$CXX" = "g++" ]]; then
-       export CXX="g++-5" CC="gcc-5" BOOST_TOOLSET=gcc;
+       export CXX="g++-7" CC="gcc-7" BOOST_TOOLSET=gcc;
        export CXXFLAGS="--param ggc-min-expand=20 --param ggc-min-heapsize=512000"
        ln -s /usr/bin/${CXX} latest-gcc-symlinks/g++
        ln -s /usr/bin/${CC} latest-gcc-symlinks/gcc
