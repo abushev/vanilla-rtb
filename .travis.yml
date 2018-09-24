@@ -12,7 +12,7 @@ matrix:
         apt:
           sources: [ 'ubuntu-toolchain-r-test', 'kalakris-cmake' ]
           packages: [ 'g++-7', 'libstdc++-7-dev', 'cmake' ]
-      env: CMAKE_BUILD_TYPE=Debug BOOST_VERSION=1.60.0 BOOST_BUILD=true
+      env: CMAKE_BUILD_TYPE=Debug BOOST_VERSION=1.68.0 BOOST_BUILD=true
 #    - os: linux
 #      compiler: clang
 #      addons:
@@ -35,7 +35,7 @@ cache:
   directories:
   - $HOME/.ccache
   #- $HOME/download
-  - ${TRAVIS_BUILD_DIR}/deps/boost-1.60.0
+  - ${TRAVIS_BUILD_DIR}/deps/boost-1.68.0
 
 install:
   ############################################################################
@@ -72,8 +72,9 @@ install:
           travis_retry git clone --depth 1 --recursive --quiet ${BOOST_URL} ${BOOST_DIR} || exit 1
           (cd ${BOOST_DIR} && ./bootstrap.sh && ./b2 headers)
         else
+          BOOST_URL="https://dl.bintray.com/boostorg/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION//\./_}.tar.gz"
           ##BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz"
-          BOOST_URL="http://venediktov.github.io/boost_${BOOST_VERSION//\./_}.tar.gz"
+          ##BOOST_URL="http://venediktov.github.io/boost_${BOOST_VERSION//\./_}.tar.gz"
           mkdir -p ${BOOST_DIR}
           ##{ travis_retry wget --quiet -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_DIR}; } || exit 1
           { travis_retry wget  -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_DIR}; } || exit 1
