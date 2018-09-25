@@ -34,6 +34,9 @@ namespace DSL {
         using deserialized_type = openrtb::BidRequest<T>;
         using serialized_type = openrtb::BidResponse<T>;
         using parse_error_type = jsonv::parse_error;
+        dsl_mapper() : request_fmt_{build_request()}, response_fmt_{build_response()}
+        {}
+
     private:
         //BidRequest
         using Banner = openrtb::Banner<T>;
@@ -54,8 +57,6 @@ namespace DSL {
     protected:
         using encoded_type =  jsonv::value;
 
-        dsl_mapper() : request_fmt_{build_request()}, response_fmt_{build_response()}
-        {}
 
         formats build_request() 
         {

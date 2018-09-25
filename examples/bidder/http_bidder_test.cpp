@@ -103,8 +103,7 @@ int main(int argc, char *argv[]) {
     auto request_user_data_f = [&bid_handler, &config](http::server::reply &reply, BidRequest &, auto && info) {
         using kv_type = vanilla::client::empty_key_value_client;
         thread_local kv_type kv_client;
-        bool is_matched_user = info.user_id.length();
-        if (!is_matched_user) {
+        if (auto is_matched_user = info.user_id.length(); !is_matched_user) {
             return true; // bid unmatched
         }
         if (!kv_client.connected()) {
