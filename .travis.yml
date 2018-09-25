@@ -7,11 +7,13 @@ language: cpp
 matrix:
   include:
     - os: linux
+      dist: trusty
+      sudo: required
       compiler: gcc
       addons:
         apt:
           sources: [ 'ubuntu-toolchain-r-test', 'kalakris-cmake' ]
-          packages: [ 'g++-7', 'libstdc++-7-dev', 'cmake' ]
+          packages: [ 'g++-7', 'libstdc++-7-dev']
       env: CMAKE_BUILD_TYPE=Debug BOOST_VERSION=1.67.0 BOOST_BUILD=true
 #    - os: linux
 #      compiler: clang
@@ -102,15 +104,15 @@ install:
   ############################################################################
   # Install a recent CMake
   ############################################################################
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
-      mkdir  cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-    else
-      brew install cmake
-      brew upgrade cmake
-    fi
+  #- |
+  #  if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+  #    CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
+  #    mkdir  cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+  #    export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+  #  else
+  #    brew install cmake
+  #    brew upgrade cmake
+  #  fi
 
 before_script:
   - ccache -V && ccache --show-stats && ccache --zero-stats
