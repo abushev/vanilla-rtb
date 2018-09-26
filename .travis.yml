@@ -12,7 +12,7 @@ matrix:
       compiler: gcc
       addons:
         apt:
-          sources: [ 'ubuntu-toolchain-r-test', 'kalakris-cmake' ]
+          sources: [ 'ubuntu-toolchain-r-test']
           packages: [ 'g++-7', 'libstdc++-7-dev']
       env: CMAKE_BUILD_TYPE=Debug BOOST_VERSION=1.67.0 BOOST_BUILD=true
 #    - os: linux
