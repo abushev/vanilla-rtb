@@ -27,6 +27,8 @@
 #include "serialization.hpp"
 #include "rtb/common/decision_router.hpp"
 #include "rtb/client/empty_key_value_client.hpp"
+#include "rtb/prometheus/simple_counter.hpp"
+
 
 extern void init_framework_logging(const std::string &) ;
 
@@ -90,7 +92,8 @@ int main(int argc, char *argv[]) {
         LOG(error) << e.what();
         return 0;
     }
-    
+
+    vanilla::SimpleCounter simple_counter("requests", "Incomming bid requests");
     using bid_handler_type = exchange_handler<DSLT, vanilla::UserInfo>;   
     using decision_router_type = vanilla::decision::router < bidder_decision_codes::SIZE , 
                                                                  http::server::reply& , 
@@ -149,6 +152,7 @@ int main(int argc, char *argv[]) {
     restful_dispatcher_t dispatcher(ep.root);
     dispatcher.crud_match(boost::regex("/bid/(\\d+)"))
         .post([&](http::server::reply & r, const http::crud::crud_match<boost::cmatch> & match) {
+            simple_counter.inc();
             bid_handler.handle_post(r, match);
         });
     dispatcher.crud_match(boost::regex("/test/"))
@@ -157,7 +161,12 @@ int main(int argc, char *argv[]) {
             //r.stock_reply(http::server::reply::ok);
             r << "test" << http::server::reply::flush("text");
         });
-
+    dispatcher.crud_match(boost::regex("/metrics/"))
+        .get([&](http::server::reply & r, const http::crud::crud_match<boost::cmatch> & match) {
+            std::stringstream ss;
+            ss << simple_counter;
+            r << ss.str() << http::server::reply::flush("text");
+        });
     LOG(debug) << "concurrency " << config.data().concurrency;
     exchange_server<restful_dispatcher_t> server{ep,dispatcher} ;
     server.set_concurrency(config.data().concurrency).run() ;
