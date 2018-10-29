@@ -161,7 +161,7 @@ int main(int argc, char *argv[]) {
             //r.stock_reply(http::server::reply::ok);
             r << "test" << http::server::reply::flush("text");
         });
-    dispatcher.crud_match(boost::regex("/metrics/"))
+    dispatcher.crud_match(boost::regex("/metrics"))
         .get([&](http::server::reply & r, const http::crud::crud_match<boost::cmatch> & match) {
             std::stringstream ss;
             ss << simple_counter;
